@@ -1,0 +1,165 @@
+ul.xMenu{
+    list-style:none; 
+    margin:0;
+    padding:0;
+    font: 300 15px sans-serif;
+    position: fixed;
+    box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14), 0 1px 5px 0 rgba(0,0,0,0.12), 0 3px 1px -2px rgba(0,0,0,0.2);
+    z-index: 99999;
+    border-radius: 5px;
+    display: none;
+    background-color: #ffffff;
+    opacity: 1;
+    overflow: hidden;
+    max-height: 400px;
+    transition: max-height 0.1s cubic-bezier(1,.5,.5,0)
+}
+ul.xMenu.hide{
+    max-height: 0;
+    pointer-events: none;
+}
+ul.xMenu i{
+    padding: 6px;  
+}
+
+ul.xMenu *{
+    transition:color .2s, background .2s;
+}
+
+ul.xMenu li{
+    min-width:150px;
+    overflow: hidden;
+    white-space: nowrap;
+    padding: 6px 8px;
+    /*background-color: #fff;*/
+    /*background-color: #eaeaea;*/
+    border-bottom:1px solid #e0e0e0;
+    cursor: pointer;
+}
+
+/*ul.xMenu li a{
+    color:#333;
+    text-decoration:none;
+}*/
+
+ul.xMenu li[disable='true'] label:first-child, ul li[disable='disabled'] label:first-child {
+    cursor: no-drop;
+}
+ul.xMenu li label:first-child{
+    cursor: pointer;  
+}
+
+ul.xMenu li:hover{
+    background-color: #eeeeee;
+}
+
+ul.xMenu li:first-child{
+    border-radius: 5px 5px 0 0;
+}
+
+ul.xMenu li:last-child{
+    /*// background:#ecf0f1;*/
+    border-bottom:0;
+    border-radius: 0 0 5px 5px
+}
+
+ul.xMenu li:last-child a{width:26%;}
+ul.xMenu li:last-child:hover a{color:#2c3e50}
+ul.xMenu li:last-child:hover a:hover{color:#2980b9}
+
+ul.xMenu li span{
+    padding-left: 8px;
+}
+ul.xMenu li.disabled{
+    cursor: no-drop !important;
+    color: #afafaf;
+}
+ul.xMenu li[disabled='disabled'], ul.xMenu li[disable='true'] {
+    cursor: no-drop !important;
+    color: #afafaf;
+}
+
+ul.xMenu li div:nth-child(1){
+    padding-top: 2px;
+    float: left; 
+    max-width: 28px
+} 
+ul.xMenu li div:nth-child(2){
+    float: left; 
+    max-width: 21px
+} 
+ul.xMenu li div:nth-child(3){
+    float: left; 
+    padding-top: 5px;
+    /*width: calc(100% - 129px)*/
+} 
+ul.xMenu li div:nth-child(4){
+    float: right; 
+    max-width: 80px; 
+    font-size: 13px;
+    padding-top: 7px;
+    color: #666666;
+
+} 
+
+/*chekbox*/
+.xMenuCheckIn{
+    height: 0;
+    width: 0;
+    visibility: hidden;
+}
+
+ul.xMenu li[disable='true'] .xMenuCheckLa, ul.xMenu li[disable='disable'] .xMenuCheckLa{
+    cursor: no-drop;
+}
+
+.xMenuCheckLa{
+    /*cursor: pointer;*/
+    text-indent: -9999px;
+    width: 28px;
+    height: 14px;
+    background: #999999;
+    display: block;
+    border-radius: 100px;
+    position: relative;
+    transition: 0.8s;
+    cursor: pointer;
+}
+
+.xMenuCheckLa:after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border-radius: 90px;
+    transition: 0.3s;
+}
+
+.xMenuCheckIn:checked + label {
+    background: #57b9d6;
+    transition: 0.8s;
+}
+
+.xMenuCheckIn:checked + label:after {
+    left: calc(100% - 2px);
+    transform: translateX(-100%);
+}
+
+.xMenuCheckLa:active:after {
+    width: 15px;
+}
+
+.pnBackgroudxMenu{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.08);
+    z-index: 9999;
+}
+
+
