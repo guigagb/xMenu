@@ -36,7 +36,7 @@ export default (function () {
 
             setMain: function (arg) {
                 this.element = document.createElement('ul');
-                this.element.setAttribute('id', 'popup_' + arg.id);
+                this.element.setAttribute('id', 'xMenu_' + arg.id);
                 this.element.classList.add("xMenu");
                 this.element.setAttribute('hidden', 'hidden');
                 if (arg.buttonLeft)
@@ -49,10 +49,6 @@ export default (function () {
                     let [name, props] = ln;
 
                     countItems++;
-
-
-                    if (props.id === undefined)
-                        props.id = 'popUp_id_' + arg.id + countItems;
 
                     let divHtml = document.createElement('div');
                     let html = document.createElement('span');
@@ -77,7 +73,7 @@ export default (function () {
                     }
 
                     let li = document.createElement('li');
-                    li.setAttribute('id', props.id);
+                    li.setAttribute('id', 'xMenu_' + name);
 
                     if (divIcon !== undefined)
                         li.appendChild(divIcon);
@@ -93,9 +89,9 @@ export default (function () {
                 });
             },
 
-            setBackground: ()=>{
+            setBackground: () => {
                 ax.background = document.createElement('div');
-                ax.background.setAttribute('id', 'pnBackgroudxMenu'+ arg.id);
+                ax.background.setAttribute('id', 'pnBackgroudxMenu' + arg.id);
                 ax.background.classList.add('pnBackgroudxMenu');
                 ax.background.style.display = 'none';
             },
@@ -110,7 +106,6 @@ export default (function () {
             setOpenMenu: function (arg) {
 
                 function openMenu(event) {
-                    console.log('oi');
                     if (arg.open)
                         arg.open();
 
@@ -149,16 +144,35 @@ export default (function () {
 
             setCloseMenu: function (arg) {
 
-                ax.background.addEventListener('click', (e)=>{
-                    ax.background.style.display = 'none';
-                    ax.element.classList.add('hide');
-                    // $('#popup_' + idxMenu).hide('fast');
-                })
+                ax.background.addEventListener('click', this.eventCloseClick);
+                ax.element.addEventListener('click', this.eventCloseClick)
 
-                ax.element.addEventListener('click', (e)=>{
-                    ax.background.style.display = 'none';
-                    ax.element.classList.add('hide');
-                })
+            },
+
+            eventCloseClick: (e) => {
+                ax.background.style.display = 'none';
+                ax.element.classList.add('hide');
+            },
+
+            disableItem: function (item, arg) {
+
+                let idItem = '#xMenu_' + arg.id + ' #xMenu_' + item;
+                let element = document.querySelector(idItem);
+                arg.itens[item].disable = true;
+
+                if (element.className.indexOf('dis_ok') === -1) {
+                    element.setAttribute('disable', true);
+
+                    if (Object.keys(getEventListeners(element)).length > 0)
+                        getEventListeners(element).click.forEach((e) => { e.remove() })
+
+                    element.classList.add('dis_ok');
+                    element.classList.remove('ena_ok');
+
+                    let checkbox = element.querySelector('input[type="checkbox"]');
+                    if (checkbox)
+                        checkbox.setAttribute('disabled', 'disabled');
+                }
 
             }
         }
@@ -169,6 +183,8 @@ export default (function () {
         ax.appendBody();
         ax.setOpenMenu(arg);
         ax.setCloseMenu(arg);
+
+        this.disableItem = (item) => ax.disableItem(item, arg);
 
         console.log(ax.element);
 

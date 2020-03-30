@@ -1,18 +1,18 @@
 import xMenu from "../xMenu2.js";
 
-let menu1 = new xMenu.create({
+var menu1 = new xMenu.create({
     id: '#meuMenu1',
     buttonLeft: false,
     itens: {
-        teste: {
-            id: 'oi'
+        oi: {
+  
         },
         teste2: {
         }
     }
 });
 
-let menu2 = new xMenu.create({
+var menu2 = new xMenu.create({
     id: '#meuMenu2',
     itens: {
         teste: {
@@ -23,3 +23,5 @@ let menu2 = new xMenu.create({
         }
     }
 });
+
+window.menu1 = menu1;
