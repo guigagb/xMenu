@@ -17,6 +17,7 @@ export default (function () {
             disable: false,
             animate: undefined,
             onOpen: undefined,
+            onCreate: undefined,
             callClick: {}
         };
 
@@ -49,6 +50,20 @@ export default (function () {
 
                     countItems++;
 
+                    let divCheckbox = document.createElement('div');
+                    if (props.checkbox) {
+                        let inputHtml = document.createElement('input');
+                        inputHtml.setAttribute('type', 'checkbox');
+                        inputHtml.setAttribute('id', 'sw' + arg.id + countItems);
+                        inputHtml.classList.add('xMenuCheckIn');
+
+                        let label = document.createElement('label');
+                        label.classList.add('xMenuCheckLa');
+
+                        divCheckbox.appendChild(inputHtml);
+                        divCheckbox.appendChild(label);
+                    }
+
                     let divHtml = document.createElement('div');
                     let html = document.createElement('span');
                     divHtml.appendChild(html);
@@ -57,9 +72,8 @@ export default (function () {
                     let divIcon = document.createElement('div');
                     let icon = document.createElement('i');
                     if (props.icon !== undefined)
-                        icon.classList.add(props.icon);
+                        icon.classList = props.icon;
                     divIcon.appendChild(icon);
-
 
                     let divShortKey = undefined;
                     if (props.shortKey !== undefined) {
@@ -74,9 +88,8 @@ export default (function () {
                     let li = document.createElement('li');
                     li.setAttribute('id', 'xMenu_' + name);
 
-                    if (divIcon !== undefined)
-                        li.appendChild(divIcon);
-
+                    li.appendChild(divCheckbox)
+                    li.appendChild(divIcon);
                     li.appendChild(divHtml);
 
                     if (divShortKey !== undefined)
@@ -155,6 +168,18 @@ export default (function () {
                 ax.element.classList.add('hide');
             },
 
+            disableAll(arg) {
+                Object.keys(arg.itens).forEach(key => {
+                    this.disableItem(key, arg);
+                })
+            },
+
+            enableAll(arg) {
+                Object.keys(arg.itens).forEach(key => {
+                    this.enableItem(key, arg);
+                })
+            },
+
             disableItem(item, arg) {
 
                 let idItem = '#xMenu_' + arg.id + ' #xMenu_' + item;
@@ -207,8 +232,26 @@ export default (function () {
 
             setHtml(item, html, arg) {
                 let domItem = document.querySelector('#xMenu_' + arg.id + ' #xMenu_' + item);
-                if(domItem)
+                if (domItem)
                     domItem.getElementsByTagName('span')[0].innerHTML = html;
+            },
+
+            setIcon(item, icon, arg) {
+                let domItem = document.querySelector('#xMenu_' + arg.id + ' #xMenu_' + item);
+                if (domItem) {
+                    domItem.getElementsByTagName('i')[0].classList = ''
+                    domItem.getElementsByTagName('i')[0].classList = icon;
+                }
+            },
+
+            setDisable(arg){
+                if(arg.disable)
+                    this.disableAll(arg);
+            },
+
+            setCreate(arg){
+                if(arg.onCreate)
+                    arg.onCreate();
             }
 
         }
@@ -219,6 +262,10 @@ export default (function () {
         ax.appendBody();
         ax.setOpenMenu(arg);
         ax.setCloseMenu(arg);
+        ax.setDisable(arg);
+        ax.setCreate(arg)
+
+        this.disableAll = () => ax.disableAll(arg);
 
         this.disableItem = (item) => ax.disableItem(item, arg);
 
@@ -227,6 +274,8 @@ export default (function () {
         this.enable = (item, boolean) => ax.enable(item, boolean);
 
         this.setHtml = (item, html) => ax.setHtml(item, html, arg)
+
+        this.setIcon = (item, icon) => ax.setIcon(item, icon, arg);
 
     }
 

@@ -3,12 +3,16 @@ import xMenu from "../xMenu2.js";
 var menu1 = new xMenu.create({
     id: '#meuMenu1',
     buttonLeft: false,
+    disable: true,
+    onCreate: ()=>{
+        console.log('abcde');
+    },
     onOpen: ()=>{
-        console.log('abriu');
-        menu1.disableItem('oi');
+        console.log('456');
     },
     itens: {
         oi: {
+            icon: 'fa fa-search',
             click: function () {  
                 console.log('oi');
             }
