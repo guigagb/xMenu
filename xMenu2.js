@@ -203,7 +203,14 @@ export default (function () {
                     this.enableItem(item, arg)
                 else
                     this.disableItem(item, arg)
+            },
+
+            setHtml(item, html, arg) {
+                let domItem = document.querySelector('#xMenu_' + arg.id + ' #xMenu_' + item);
+                if(domItem)
+                    domItem.getElementsByTagName('span')[0].innerHTML = html;
             }
+
         }
 
         ax.setMain(arg);
@@ -218,6 +225,8 @@ export default (function () {
         this.enableItem = (item) => ax.enableItem(item, arg);
 
         this.enable = (item, boolean) => ax.enable(item, boolean);
+
+        this.setHtml = (item, html) => ax.setHtml(item, html, arg)
 
     }
 
