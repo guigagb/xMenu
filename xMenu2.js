@@ -16,7 +16,7 @@ export default (function () {
             shortKey: undefined,
             disable: false,
             animate: undefined,
-            open: false,
+            onOpen: undefined,
             callClick: {}
         };
 
@@ -82,8 +82,8 @@ export default (function () {
                     if (divShortKey !== undefined)
                         li.appendChild(divShortKey);
 
-                    if(props.click)
-                        li.addEventListener('click',props.click)
+                    if (props.click)
+                        li.addEventListener('click', props.click)
 
                     this.element.appendChild(li);
 
@@ -107,8 +107,8 @@ export default (function () {
             setOpenMenu(arg) {
 
                 function openMenu(event) {
-                    if (arg.open)
-                        arg.open();
+                    if (arg.onOpen)
+                        arg.onOpen();
 
                     var op = {
                         top: event.pageY + 2,
@@ -144,7 +144,7 @@ export default (function () {
             },
 
             setCloseMenu(arg) {
-
+                console.log(elementMenu);
                 ax.background.addEventListener('click', this.eventCloseClick);
                 ax.element.addEventListener('click', this.eventCloseClick)
 
@@ -164,7 +164,7 @@ export default (function () {
                 if (element.className.indexOf('dis_ok') === -1) {
                     element.setAttribute('disable', true);
 
-                    if(arg.itens[item].click)
+                    if (arg.itens[item].click)
                         element.removeEventListener('click', arg.itens[item].click)
 
                     element.classList.add('dis_ok');
@@ -185,7 +185,7 @@ export default (function () {
                 if (element.className.indexOf('ena_ok') === -1) {
                     element.setAttribute('disable', false);
 
-                    if(arg.itens[item].click)
+                    if (arg.itens[item].click)
                         element.addEventListener('click', arg.itens[item].click)
 
                     element.classList.remove('dis_ok');
@@ -196,6 +196,13 @@ export default (function () {
                         checkbox.removeAttribute('disabled');
 
                 }
+            },
+
+            enable(item, boolean) {
+                if (boolean)
+                    this.enableItem(item, arg)
+                else
+                    this.disableItem(item, arg)
             }
         }
 
@@ -209,6 +216,8 @@ export default (function () {
         this.disableItem = (item) => ax.disableItem(item, arg);
 
         this.enableItem = (item) => ax.enableItem(item, arg);
+
+        this.enable = (item, boolean) => ax.enable(item, boolean);
 
     }
 

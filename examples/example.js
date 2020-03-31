@@ -3,8 +3,9 @@ import xMenu from "../xMenu2.js";
 var menu1 = new xMenu.create({
     id: '#meuMenu1',
     buttonLeft: false,
-    open: ()->{
-
+    onOpen: ()=>{
+        console.log('abriu');
+        menu1.disableItem('oi');
     },
     itens: {
         oi: {
