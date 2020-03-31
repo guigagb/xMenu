@@ -3,9 +3,14 @@ import xMenu from "../xMenu2.js";
 var menu1 = new xMenu.create({
     id: '#meuMenu1',
     buttonLeft: false,
+    open: ()->{
+
+    },
     itens: {
         oi: {
-  
+            click: function () {  
+                console.log('oi');
+            }
         },
         teste2: {
         }

@@ -15,7 +15,6 @@ export default (function () {
             icon: undefined,
             shortKey: undefined,
             disable: false,
-            click: {},
             animate: undefined,
             open: false,
             callClick: {}
@@ -34,7 +33,7 @@ export default (function () {
             background: '',
             shortKeyEnable: false,
 
-            setMain: function (arg) {
+            setMain(arg) {
                 this.element = document.createElement('ul');
                 this.element.setAttribute('id', 'xMenu_' + arg.id);
                 this.element.classList.add("xMenu");
@@ -43,7 +42,7 @@ export default (function () {
                     this.element.classList.add("pop_up_btn_left");
             },
 
-            setList: function (arg) {
+            setList(arg) {
                 //loop que adiciona os itens passados para o menu
                 Object.entries(arg.itens).forEach(ln => {
                     let [name, props] = ln;
@@ -83,27 +82,29 @@ export default (function () {
                     if (divShortKey !== undefined)
                         li.appendChild(divShortKey);
 
+                    if(props.click)
+                        li.addEventListener('click',props.click)
 
                     this.element.appendChild(li);
 
                 });
             },
 
-            setBackground: () => {
+            setBackground() {
                 ax.background = document.createElement('div');
                 ax.background.setAttribute('id', 'pnBackgroudxMenu' + arg.id);
                 ax.background.classList.add('pnBackgroudxMenu');
                 ax.background.style.display = 'none';
             },
 
-            appendBody: function () {
+            appendBody() {
                 document.body.append(this.element);
                 document.body.append(this.background);
 
                 elementMenu = document.querySelector(arg.el)
             },
 
-            setOpenMenu: function (arg) {
+            setOpenMenu(arg) {
 
                 function openMenu(event) {
                     if (arg.open)
@@ -142,19 +143,19 @@ export default (function () {
                 elementMenu.addEventListener(context, openMenu)
             },
 
-            setCloseMenu: function (arg) {
+            setCloseMenu(arg) {
 
                 ax.background.addEventListener('click', this.eventCloseClick);
                 ax.element.addEventListener('click', this.eventCloseClick)
 
             },
 
-            eventCloseClick: (e) => {
+            eventCloseClick() {
                 ax.background.style.display = 'none';
                 ax.element.classList.add('hide');
             },
 
-            disableItem: function (item, arg) {
+            disableItem(item, arg) {
 
                 let idItem = '#xMenu_' + arg.id + ' #xMenu_' + item;
                 let element = document.querySelector(idItem);
@@ -163,8 +164,8 @@ export default (function () {
                 if (element.className.indexOf('dis_ok') === -1) {
                     element.setAttribute('disable', true);
 
-                    if (Object.keys(getEventListeners(element)).length > 0)
-                        getEventListeners(element).click.forEach((e) => { e.remove() })
+                    if(arg.itens[item].click)
+                        element.removeEventListener('click', arg.itens[item].click)
 
                     element.classList.add('dis_ok');
                     element.classList.remove('ena_ok');
@@ -174,6 +175,27 @@ export default (function () {
                         checkbox.setAttribute('disabled', 'disabled');
                 }
 
+            },
+
+            enableItem(item, arg) {
+                let idItem = '#xMenu_' + arg.id + ' #xMenu_' + item;
+                let element = document.querySelector(idItem);
+                arg.itens[item].disable = false;
+
+                if (element.className.indexOf('ena_ok') === -1) {
+                    element.setAttribute('disable', false);
+
+                    if(arg.itens[item].click)
+                        element.addEventListener('click', arg.itens[item].click)
+
+                    element.classList.remove('dis_ok');
+                    element.classList.add('ena_ok');
+
+                    let checkbox = element.querySelector('input[type="checkbox"]');
+                    if (checkbox)
+                        checkbox.removeAttribute('disabled');
+
+                }
             }
         }
 
@@ -186,7 +208,7 @@ export default (function () {
 
         this.disableItem = (item) => ax.disableItem(item, arg);
 
-        console.log(ax.element);
+        this.enableItem = (item) => ax.enableItem(item, arg);
 
     }
 
