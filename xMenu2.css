@@ -35,6 +35,10 @@ ul.xMenu li{
     /*background-color: #eaeaea;*/
     border-bottom:1px solid #e0e0e0;
     cursor: pointer;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
 }
 
 /*ul.xMenu li a{
@@ -79,7 +83,17 @@ ul.xMenu li[disabled='disabled'], ul.xMenu li[disable='true'] {
     color: #afafaf;
 }
 
-ul.xMenu li div:nth-child(1){
+ul.xMenu li div{
+    display: flex;
+    align-items: center;
+    flex-basis: 0;
+    flex-shrink: 0;
+}
+ul.xMenu li div:nth-child(2){
+    flex-grow: 4;
+}
+
+/* ul.xMenu li div:nth-child(1){
     padding-top: 2px;
     float: left; 
     max-width: 28px
@@ -91,7 +105,6 @@ ul.xMenu li div:nth-child(2){
 ul.xMenu li div:nth-child(3){
     float: left; 
     padding-top: 5px;
-    /*width: calc(100% - 129px)*/
 } 
 ul.xMenu li div:nth-child(4){
     float: right; 
@@ -100,13 +113,11 @@ ul.xMenu li div:nth-child(4){
     padding-top: 7px;
     color: #666666;
 
-} 
+}  */
 
 /*chekbox*/
-.xMenuCheckIn{
-    height: 0;
-    width: 0;
-    visibility: hidden;
+.xMenuCheckLa input{
+    display: none;
 }
 
 ul.xMenu li[disable='true'] .xMenuCheckLa, ul.xMenu li[disable='disable'] .xMenuCheckLa{
@@ -130,7 +141,7 @@ ul.xMenu li[disable='true'] .xMenuCheckLa, ul.xMenu li[disable='disable'] .xMenu
     content: '';
     position: absolute;
     top: 2px;
-    left: 2px;
+    left: 3px;
     width: 10px;
     height: 10px;
     background: #fff;
@@ -138,7 +149,19 @@ ul.xMenu li[disable='true'] .xMenuCheckLa, ul.xMenu li[disable='disable'] .xMenu
     transition: 0.3s;
 }
 
-.xMenuCheckIn:checked + label {
+.xMenuCheckLa.checked:after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 15px;
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border-radius: 90px;
+    transition: 0.3s;
+}
+
+.xMenuCheckLa.checked{
     background: #57b9d6;
     transition: 0.8s;
 }

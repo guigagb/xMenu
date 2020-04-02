@@ -51,32 +51,32 @@ export default (function () {
 
                     let divCheckbox = document.createElement('div');
                     if (props.checkbox) {
-                        let inputHtml = document.createElement('input');
-                        inputHtml.setAttribute('type', 'checkbox');
-                        inputHtml.setAttribute('id', 'sw' + arg.id + countItems);
-                        inputHtml.classList.add('xMenuCheckIn');
-
                         let label = document.createElement('label');
                         label.classList.add('xMenuCheckLa');
 
-                        divCheckbox.appendChild(inputHtml);
+                        let inputCheck = document.createElement('input');
+                        inputCheck.setAttribute('type', 'checkbox');
+                        inputCheck.setAttribute('id', 'sw' + arg.id + countItems);
+
+                        label.appendChild(inputCheck);
                         divCheckbox.appendChild(label);
                     }
 
                     let divHtml = document.createElement('div');
-                    let html = document.createElement('span');
-                    divHtml.appendChild(html);
-                    html.innerHTML = props.html === undefined ? name : props.html;
 
-                    let divIcon = document.createElement('div');
                     let icon = document.createElement('i');
                     if (props.icon !== undefined)
                         icon.classList = props.icon;
-                    divIcon.appendChild(icon);
 
-                    let divShortkey = undefined;
+                    let html = document.createElement('span');
+                    html.innerHTML = props.html === undefined ? name : props.html;
+
+                    divHtml.appendChild(icon);
+                    divHtml.appendChild(html);
+
+                    let divShortkey = document.createElement('div');
                     if (props.shortkey !== undefined) {
-                        divShortkey = document.createElement('div');
+
                         let shortkey = document.createElement('span');
                         let [keyName, keyCode] = Object.entries(props.shortkey)[0];
                         shortkey.classList.add('short');
@@ -84,25 +84,31 @@ export default (function () {
                         keyDown[String(keyCode).toUpperCase()] = props.click;
 
                         divShortkey.appendChild(shortkey);
-
                     }
 
                     let li = document.createElement('li');
                     li.setAttribute('id', 'xMenu_' + name);
 
-                    li.appendChild(divCheckbox)
-                    li.appendChild(divIcon);
+                    li.appendChild(divCheckbox);
                     li.appendChild(divHtml);
 
-                    if (divShortkey !== undefined) {
+                    if (divShortkey !== undefined) 
                         li.appendChild(divShortkey);
+                    
+                    if (props.click)
+                        li.addEventListener('click', props.click);
+
+                    if (props.checkbox) {
+                        li.addEventListener('change', () => {
+                            if (divCheckbox.querySelector('label').classList.contains('checked'))
+                                divCheckbox.querySelector('label').classList.remove('checked')
+                            else
+                                divCheckbox.querySelector('label').classList.add('checked');
+                        });
                     }
 
-                    if (props.click)
-                        li.addEventListener('click', props.click)
-
-                    this.elList[name] = li
                     this.element.appendChild(li);
+                    this.elList[name] = li
 
                 });
             },
@@ -267,8 +273,8 @@ export default (function () {
                     let shiftKey = e.shiftKey ? "SHIFT+" : "";
                     let altKey = e.altKey ? "ALT+" : "";
                     let key = ctrlKey + shiftKey + altKey + e.keyCode;
-                    key = key.replace('+16','').replace('+17','').replace('+18','');
-                    
+                    key = key.replace('+16', '').replace('+17', '').replace('+18', '');
+
                     if (keyDown[key]) {
                         keyDown[key]();
                         this.eventCloseClick();
