@@ -268,7 +268,7 @@ export default (function () {
                     let altKey = e.altKey ? "ALT+" : "";
                     let key = ctrlKey + shiftKey + altKey + e.keyCode;
                     key = key.replace('+16','').replace('+17','').replace('+18','');
-                    console.log(key,keyDown);
+                    
                     if (keyDown[key]) {
                         keyDown[key]();
                         this.eventCloseClick();
