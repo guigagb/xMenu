@@ -1,19 +1,18 @@
 export default (function () {
 
     const versao = '2.0';
-    let countMenu = 0;
 
     function create(param) {
-        countMenu++;
+
         var countItems = 0;
-        var elementMenu = undefined; // essa variável serve para armazenar a referência do menu após ter sido adicionado no body;
+        var elContainerMenu = undefined; // essa variável serve para armazenar a refencia do container do menu após ter sido adicionado no body;
+        var keyDown = {};
 
         const argDefault = {
             el: '',
             itens: {},
             buttonLeft: false,
             icon: undefined,
-            shortKey: undefined,
             disable: false,
             animate: undefined,
             onOpen: undefined,
@@ -32,12 +31,12 @@ export default (function () {
             element: '',    // popup
             list: [],       // itens do popup
             background: '',
-            shortKeyEnable: false,
+            elList: {},
 
             setMain(arg) {
                 this.element = document.createElement('ul');
                 this.element.setAttribute('id', 'xMenu_' + arg.id);
-                this.element.classList.add("xMenu");
+                this.element.classList = "xMenu hide";
                 this.element.setAttribute('hidden', 'hidden');
                 if (arg.buttonLeft)
                     this.element.classList.add("pop_up_btn_left");
@@ -75,14 +74,17 @@ export default (function () {
                         icon.classList = props.icon;
                     divIcon.appendChild(icon);
 
-                    let divShortKey = undefined;
-                    if (props.shortKey !== undefined) {
-                        divShortKey = document.createElement('div');
-                        let shortKey = document.createElement('span');
-                        shortKey.classList.add('short');
-                        shortKey.innerText = props.shortKey;
-                        divShortKey.appendChild(shortKey);
-                        this.shortKeyEnable = true;
+                    let divShortkey = undefined;
+                    if (props.shortkey !== undefined) {
+                        divShortkey = document.createElement('div');
+                        let shortkey = document.createElement('span');
+                        let [keyName, keyCode] = Object.entries(props.shortkey)[0];
+                        shortkey.classList.add('short');
+                        shortkey.innerHTML = keyName;
+                        keyDown[String(keyCode).toUpperCase()] = props.click;
+
+                        divShortkey.appendChild(shortkey);
+
                     }
 
                     let li = document.createElement('li');
@@ -92,12 +94,14 @@ export default (function () {
                     li.appendChild(divIcon);
                     li.appendChild(divHtml);
 
-                    if (divShortKey !== undefined)
-                        li.appendChild(divShortKey);
+                    if (divShortkey !== undefined) {
+                        li.appendChild(divShortkey);
+                    }
 
                     if (props.click)
                         li.addEventListener('click', props.click)
 
+                    this.elList[name] = li
                     this.element.appendChild(li);
 
                 });
@@ -113,15 +117,14 @@ export default (function () {
             appendBody() {
                 document.body.append(this.element);
                 document.body.append(this.background);
-
-                elementMenu = document.querySelector(arg.el)
+                elContainerMenu = document.querySelector(arg.el)
             },
 
             setOpenMenu(arg) {
 
                 function openMenu(event) {
                     if (arg.onOpen)
-                        arg.onOpen();
+                        arg.onOpen(ax.elList);
 
                     var op = {
                         top: event.pageY + 2,
@@ -145,7 +148,7 @@ export default (function () {
 
 
                     if (arg.animate !== undefined)
-                        elementMenu.classList.add('animated ' + arg.animate);
+                        elContainerMenu.classList.add('animated ' + arg.animate);
 
                     ax.background.style.display = 'block'
 
@@ -153,14 +156,12 @@ export default (function () {
                 }
 
                 let context = arg.buttonLeft === true ? 'click' : 'contextmenu';
-                elementMenu.addEventListener(context, openMenu)
+                elContainerMenu.addEventListener(context, openMenu)
             },
 
-            setCloseMenu(arg) {
-                console.log(elementMenu);
+            setCloseMenu() {
                 ax.background.addEventListener('click', this.eventCloseClick);
                 ax.element.addEventListener('click', this.eventCloseClick)
-
             },
 
             eventCloseClick() {
@@ -182,9 +183,8 @@ export default (function () {
 
             disableItem(item, arg) {
 
-                let idItem = '#xMenu_' + arg.id + ' #xMenu_' + item;
-                let element = document.querySelector(idItem);
-                arg.itens[item].disable = true;
+                let element = this.elList[item];
+                element.disable = true;
 
                 if (element.className.indexOf('dis_ok') === -1) {
                     element.setAttribute('disable', true);
@@ -203,8 +203,7 @@ export default (function () {
             },
 
             enableItem(item, arg) {
-                let idItem = '#xMenu_' + arg.id + ' #xMenu_' + item;
-                let element = document.querySelector(idItem);
+                let element = this.elList[item];
                 arg.itens[item].disable = false;
 
                 if (element.className.indexOf('ena_ok') === -1) {
@@ -230,28 +229,57 @@ export default (function () {
                     this.disableItem(item, arg)
             },
 
-            setHtml(item, html, arg) {
-                let domItem = document.querySelector('#xMenu_' + arg.id + ' #xMenu_' + item);
-                if (domItem)
-                    domItem.getElementsByTagName('span')[0].innerHTML = html;
+            setHtml(item, html) {
+                let element = this.elList[item];
+                if (element)
+                    element.getElementsByTagName('span')[0].innerHTML = html;
             },
 
-            setIcon(item, icon, arg) {
-                let domItem = document.querySelector('#xMenu_' + arg.id + ' #xMenu_' + item);
-                if (domItem) {
-                    domItem.getElementsByTagName('i')[0].classList = ''
-                    domItem.getElementsByTagName('i')[0].classList = icon;
+            setIcon(item, icon) {
+                let element = this.elList[item];
+                if (element) {
+                    element.getElementsByTagName('i')[0].classList = ''
+                    element.getElementsByTagName('i')[0].classList = icon;
                 }
             },
 
-            setDisable(arg){
-                if(arg.disable)
-                    this.disableAll(arg);
+            setDisable(arg) {
+                Object.entries(arg.itens).forEach(el => {
+                    let [key, props] = el;
+                    if (arg.disable === true || props.disable === true)
+                        this.disableItem(key, arg);
+                })
             },
 
-            setCreate(arg){
-                if(arg.onCreate)
+            setCreate(arg) {
+                if (arg.onCreate)
                     arg.onCreate();
+            },
+
+            setkeyDown() {
+
+                document.addEventListener('keydown', (e) => {
+
+                    if (this.element.classList.contains('hide'))
+                        return;
+
+                    let ctrlKey = e.ctrlKey ? "CTRL+" : "";
+                    let shiftKey = e.shiftKey ? "SHIFT+" : "";
+                    let altKey = e.altKey ? "ALT+" : "";
+                    let key = ctrlKey + shiftKey + altKey + e.keyCode;
+                    key = key.replace('+16','').replace('+17','').replace('+18','');
+                    console.log(key,keyDown);
+                    if (keyDown[key]) {
+                        keyDown[key]();
+                        this.eventCloseClick();
+                        if (e.preventDefault)
+                            e.preventDefault();
+                        if (e.stopPropagation)
+                            e.stopPropagation();
+                        return false;
+                    }
+
+                })
             }
 
         }
@@ -263,9 +291,12 @@ export default (function () {
         ax.setOpenMenu(arg);
         ax.setCloseMenu(arg);
         ax.setDisable(arg);
-        ax.setCreate(arg)
+        ax.setCreate(arg);
+        ax.setkeyDown();
 
         this.disableAll = () => ax.disableAll(arg);
+
+        this.enableAll = () => ax.enableAll(arg)
 
         this.disableItem = (item) => ax.disableItem(item, arg);
 
@@ -279,8 +310,13 @@ export default (function () {
 
     }
 
+    function getVersion() {
+        return versao;
+    }
+
     return {
-        create: create
+        create: create,
+        getVersion: getVersion
     }
 
 })();
