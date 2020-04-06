@@ -81,9 +81,9 @@ export default (function () {
                     keyDown[String(keyCode).toUpperCase()] = props.click;
                 }
 
-                if (props.subMenu !== undefined){
+                if (props.subMenu !== undefined) {
                     shortkey.innerText = '►';
-                    shortkey.classList.add('short');
+                    shortkey.classList.add('short-submenu');
                 }
 
                 divRight.appendChild(shortkey);
@@ -121,9 +121,12 @@ export default (function () {
                     if (props.click)
                         li.addEventListener('click', props.click);
 
-                    if (!props.subMenu) {
+                    if (props.subMenu === undefined) {
                         li.addEventListener('click', () => {
-                            this.eventCloseClick(li);
+                            let timeout = props.checkbox ? 400 : 0;
+                            setTimeout(() => {
+                                this.eventCloseClick(event, li);
+                            }, timeout);
                         })
                     }
 
@@ -167,29 +170,33 @@ export default (function () {
 
             setOpenMenu(arg) {
 
-                const openMenu = (event) => {
+                const openMenu = (e) => {
                     if (arg.onOpen)
                         arg.onOpen(ax.elList);
 
-                    let posParent = arg.parent ? arg.parent.getBoundingClientRect() : undefined;
+                    let posParent = arg.parent ? arg.parent.getClientRects()[0] : undefined;
+                    let parentX = posParent ? posParent.x : 0;
+                    let parentY = posParent ? posParent.y : 0;
+                    let parentWidth = arg.parentWidth ? arg.parentWidth : 0;
+                    // let parentHeight = arg.parentHeight ? arg.parentHeight : 0;
 
-                    var op = {
-                        top: posParent ? posParent.y : event.pageY + 2,
-                        left: posParent ? posParent.x + posParent.width : event.pageX + 2,
-                        heightMenu: parseFloat(33 * countItems),
-                        widthMenu: posParent ? posParent.width : 0,
-                        innerHeight: window.innerHeight,
-                        innerWidth: window.innerWidth
-                    };
+                    let top = parentY === 0 ? e.pageY + 2 : parentY;
+                    let left = parentX === 0 ? e.pageX + 2 : parentX + parentWidth;
 
-                    if (op.innerHeight - (op.heightMenu + op.top) < 0)
-                        op.top = op.top - op.heightMenu - 2;
+                    let width = arg.width;
+                    let height = arg.height;
 
-                    if (op.innerWidth - (op.left + op.widthMenu) < 0)
-                        op.left = op.left - op.widthMenu
+                    let windowHeight = window.innerHeight;
+                    let windowWidth = window.innerWidth;
 
-                    ax.element.style.top = op.top + 'px';
-                    ax.element.style.left = op.left + 'px';
+                    if (windowHeight - (top + height) < 0)
+                        top = windowHeight - height - 2;
+
+                    if (windowWidth - (left + width + parentWidth ) < 0)
+                        left = left - width - parentWidth
+
+                    ax.element.style.top = top + 'px';
+                    ax.element.style.left = left + 'px';
                     ax.element.style.display = 'block';
                     ax.element.classList.remove('hide');
 
@@ -199,16 +206,21 @@ export default (function () {
                     if (ax.background)
                         ax.background.style.display = 'block'
 
-                    event.preventDefault();
+                    e.preventDefault();
+                    e.stopPropagation();
                 }
 
-                const hideMenu = () => {
+                const hideMenu = (e) => {
                     ax.element.classList.add('hide');
+                    e.preventDefault();
+                    e.stopPropagation();
                 }
 
                 if (arg.parent) {
-                    elContainerMenu.addEventListener('mouseover', openMenu)
-                    elContainerMenu.addEventListener('mouseout', hideMenu);
+                    // a implementação de abertura com o hover não deu muito certo, depois tentar novamente.
+                    elContainerMenu.addEventListener('mouseenter', openMenu)
+                    elContainerMenu.addEventListener('mouseleave', hideMenu);
+                    // elContainerMenu.addEventListener('click', openMenu)
                 } else {
                     let context = arg.buttonLeft === true ? 'click' : 'contextmenu';
                     elContainerMenu.addEventListener(context, openMenu)
@@ -221,7 +233,7 @@ export default (function () {
                     ax.background.addEventListener('click', this.eventCloseClick);
             },
 
-            eventCloseClick(li = undefined) {
+            eventCloseClick(e, li = undefined) {
                 ax.element.classList.add('hide');
                 if (ax.background)
                     ax.background.style.display = 'none'
@@ -229,11 +241,12 @@ export default (function () {
                 if (li === undefined)
                     return
 
-                let parentUL = li.parentNode.parentNode.parentNode;
-                if (parentUL.nodeName === 'UL') {
-                    parentUL.classList.add('hide');
-                    this.eventCloseClick(li.parentNode.parentNode);
-                }
+                let parentUL = li.parentNode;
+                parentUL.classList.add('hide');
+                if(parentUL.parentNode && parentUL.parentNode.nodeName == 'LI')
+                    this.eventCloseClick(e, parentUL.parentNode);
+                
+                
             },
 
             disableAll(arg) {
@@ -358,6 +371,8 @@ export default (function () {
                             itens: props.subMenu.itens,
                             onOpen: props.subMenu.onOpen,
                             parent: ax.elList[name],
+                            parentWidth: arg.width,
+                            parentHeight: arg.height,
                             backgroundParent: ax.background
                         }, owner);
                     }
@@ -367,15 +382,20 @@ export default (function () {
             getDimensionsMenu() {
                 /* como a posição do menu é calculada antes do mesmo ser renderizado é
                 necessário clonar o objeto pra saber sua largura e altura e depois destrui-lo.*/
-                // let e = ax.element.lastChild;
-                // e.clodeNode(false);
-                // e.style.visibility = "hidden";
-                // document.body.appendChild(e);
-                // let height = e.offsetHeight + 0;
-                // let width = e.offsetWidth + 0;
-                // document.body.removeChild(e);
-                // e.style.visibility = "visible";
-                // return { height, width };
+                var cloneMenu = this.element.cloneNode(true);
+                cloneMenu.setAttribute('type', 'hidden');
+                cloneMenu.classList.remove('hide');
+                cloneMenu.style.display = 'block';
+                cloneMenu.style.top = '-9999px';
+                cloneMenu.style.left = '-9999px';
+
+                document.body.appendChild(cloneMenu);
+                let width = cloneMenu.offsetWidth;
+                let height = cloneMenu.offsetHeight;
+                cloneMenu.remove();
+
+                arg.width = width;
+                arg.height = height;
             }
 
         }
@@ -384,6 +404,7 @@ export default (function () {
         ax.setBackground(arg);
         ax.setList(arg);
         ax.append(arg);
+        ax.getDimensionsMenu(arg);
         ax.setOpenMenu(arg);
         ax.setCloseMenu(arg);
         ax.setDisable(arg);

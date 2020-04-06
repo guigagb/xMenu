@@ -202,3 +202,8 @@ ul.xMenu li div span.short{
     color: rgba(115,115,115,0.71);
 }
 
+ul.xMenu li div span.short-submenu{
+    color: rgba(78, 78, 78, 0.931);
+    font-size: 12px;
+}
+

@@ -49,12 +49,19 @@ var menu1 = new xMenu.create({
                 },
                 itens: {
                     a: {
-                        html: 'teste'
+                        html: 'teste',
+                        subMenu: {
+                            itens: {
+                                c: {
+                                    html: 'c'
+                                }
+                            }
+                        }
                     },
                     b:{
                         html: 'hoje'
                     }
-                }
+                },
             }
         }
     }
