@@ -15,11 +15,13 @@ ul.xMenu{
     transition: max-height 0.1s cubic-bezier(1,.5,.5,0)
 }
 ul.xMenu.hide{
-    max-height: 0;
+    /* max-height: 0; */
+    display: none !important;
     pointer-events: none;
 }
 ul.xMenu i{
-    padding: 6px;  
+    min-width: 26px;  
+    text-align: center;
 }
 
 ul.xMenu *{
@@ -39,6 +41,7 @@ ul.xMenu li{
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
+    height: 20px;
 }
 
 /*ul.xMenu li a{
@@ -84,10 +87,15 @@ ul.xMenu li[disabled='disabled'], ul.xMenu li[disable='true'] {
 }
 
 ul.xMenu li div{
-    display: flex;
-    align-items: center;
-    flex-basis: 0;
-    flex-shrink: 0;
+    display: inline;
+}
+
+ul.xMenu li div span{
+    text-align: left;
+}
+ul.xMenu li div:nth-child(1){
+    min-width: 28px;
+    text-align: center;
 }
 ul.xMenu li div:nth-child(2){
     flex-grow: 4;
@@ -127,9 +135,9 @@ ul.xMenu li[disable='true'] .xMenuCheckLa, ul.xMenu li[disable='disable'] .xMenu
 .xMenuCheckLa{
     /*cursor: pointer;*/
     text-indent: -9999px;
-    width: 28px;
+    width: 25px;
     height: 14px;
-    background: #999999;
+    background: #6b6b6b;
     display: block;
     border-radius: 100px;
     position: relative;
@@ -153,7 +161,7 @@ ul.xMenu li[disable='true'] .xMenuCheckLa, ul.xMenu li[disable='disable'] .xMenu
     content: '';
     position: absolute;
     top: 2px;
-    left: 15px;
+    left: 12px;
     width: 10px;
     height: 10px;
     background: #fff;
@@ -185,4 +193,12 @@ ul.xMenu li[disable='true'] .xMenuCheckLa, ul.xMenu li[disable='disable'] .xMenu
     z-index: 9999;
 }
 
+ul.xMenu li div i.icon{
+    color: #6b6b6b;
+    min-width: 17px;
+}
+
+ul.xMenu li div span.short{
+    color: rgba(115,115,115,0.71);
+}
 
