@@ -265,5 +265,5 @@ Esses métodos serão utilizados na variável instanciada. Ex.:<br>
 
 ## Desenvolvedores
 
-[Francisco Alves](https://github.com/dffrancisco)
+[Francisco Alves](https://github.com/dffrancisco)<br>
 [Guilherme Trindade](https://github.com/guigagb)    
