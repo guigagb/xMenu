@@ -1,84 +1,90 @@
 import xMenu from "../xMenu2.js";
 
-var menu1 = new xMenu.create({
-    id: '#meuMenu1',
+const menu = new xMenu.create({
+    el: '#minhaDiv',
     buttonLeft: false,
     disable: false,
     onCreate: () => {
         // console.log('abcde');
     },
     onOpen: (/*btn*/) => {
-    },
-    itens: {
-        oi: {
-            // icon: 'fa fa-search',
-            // disable: true,
-            checkbox: true,
-            shortkey: {
-                'ctrl1': 'ctrl+shift'
-            },
-            click: function () {
-                console.log('menu1');
-            }
-        },
-        hojee:{
 
-        },
-        testeeeeeee2: {
-            html: 'teste teste teste aaa',
-            icon: 'fa fa-trash',
-            shortkey: {
-                'enter': '13'
-            },
+    },
+    items: {
+        item1:{
+            html: 'Item simples',
             click: ()=>{
-                console.log('toy toy');
+                alert('item simples');
             }
         },
-        lala:{
-            // icon: 'fa fa-link',
-            checkbox: true,
-            shortkey: {
-                'abc': '12'
-            },
+        item2:{
+            html: 'Item desabilitado',
+            disable: true,
             click: ()=>{
-                console.log('menu2');
-            },
+                alert('item desabilitado');
+            }
+        },
+        item3:{
+            html: 'Item com ícone',
+            icon: 'fa fa-trash',
+            click: ()=>{
+                alert('item com ícone');
+            }
+        },
+        item4:{
+            html: 'Item com submenu',
             subMenu: {
-                onOpen: ()=>{
-                    // console.log('abriuuuuuuuu',a,b.offsetTop, b.offsetLeft);
-                },
-                itens: {
-                    a: {
-                        html: 'teste',
+                items: {
+                    item5: {
+                        html: 'Item com ícone e submenu',
+                        icon: 'fa fa-list',
                         subMenu: {
-                            itens: {
-                                c: {
-                                    html: 'c'
+                            items: {
+                                item6: {
+                                    click: ()=>{
+                                        alert('item simples!')
+                                    },
+                                    html: 'Item simples'
                                 }
                             }
                         }
                     },
-                    b:{
-                        html: 'hoje'
+                    item7:{
+                        click: ()=>{
+                            alert('item simples!')
+                        },
+                        html: 'Item simples'
                     }
                 },
+            }
+        },
+        item8: {
+            html: 'Item com checkbox',
+            checkbox: true,
+            click: function () {
+                alert('Item com checkbox');
+            }
+        },
+        item9:{
+            html: 'Item com atalho',
+            shortkey: {
+                F3: 114
+            },
+            click: ()=>{
+                alert('item com atalho!')
+            }
+        },
+        item10: {
+            html: 'Item com ícone e atalho',
+            icon: 'fa fa-trash',
+            shortkey: {
+                'F6': 117
+            },
+            click: ()=>{
+                alert('item com ícone e atalho');
             }
         }
     }
 });
 
-// var menu2 = new xMenu.create({
-//     id: '#meuMenu2',
-//     itens: {
-//         teste: {
-//             html: 'abcd',
-//             icon: 'fa-arrow-left'
-//         },
-//         teste2: {
-//         }
-//     }
-// });
-
-window.menu1 = menu1;
-// window.menu2 = menu2;
-window.xMenu = xMenu;
+window.menu = menu;

@@ -13,9 +13,8 @@ export default (function () {
 
         const argDefault = {
             el: '',
-            itens: {},
+            items: {},
             buttonLeft: false,
-            icon: undefined,
             disable: false,
             animate: undefined,
             onOpen: undefined,
@@ -28,12 +27,11 @@ export default (function () {
 
         let arg = Object.assign(argDefault, param);
 
-        arg.el = arg.id;
-        arg.id = arg.id.replace(/[#. ]/g, '');
+        arg.id = arg.el.replace(/[#. ]/g, '');
 
         let ax = {
             element: '',    // popup
-            list: [],       // itens do popup
+            list: [],       // items do popup
             background: '',
             elList: {},
 
@@ -100,9 +98,9 @@ export default (function () {
             },
 
             setList(arg) {
-                //loop que adiciona os itens passados para o menu
+                //loop que adiciona os items passados para o menu
 
-                Object.entries(arg.itens).forEach(ln => {
+                Object.entries(arg.items).forEach(ln => {
                     let [name, props] = ln;
 
                     countItems++;
@@ -165,6 +163,7 @@ export default (function () {
                     document.body.append(this.element);
                     document.body.append(this.background);
                 }
+                console.log(arg.el);
                 elContainerMenu = document.querySelector(arg.el)
             },
 
@@ -250,13 +249,13 @@ export default (function () {
             },
 
             disableAll(arg) {
-                Object.keys(arg.itens).forEach(key => {
+                Object.keys(arg.items).forEach(key => {
                     this.disableItem(key, arg);
                 })
             },
 
             enableAll(arg) {
-                Object.keys(arg.itens).forEach(key => {
+                Object.keys(arg.items).forEach(key => {
                     this.enableItem(key, arg);
                 })
             },
@@ -269,8 +268,8 @@ export default (function () {
                 if (element.className.indexOf('dis_ok') === -1) {
                     element.setAttribute('disable', true);
 
-                    if (arg.itens[item].click)
-                        element.removeEventListener('click', arg.itens[item].click)
+                    if (arg.items[item].click)
+                        element.removeEventListener('click', arg.items[item].click)
 
                     element.classList.add('dis_ok');
                     element.classList.remove('ena_ok');
@@ -284,13 +283,13 @@ export default (function () {
 
             enableItem(item, arg) {
                 let element = this.elList[item];
-                arg.itens[item].disable = false;
+                arg.items[item].disable = false;
 
                 if (element.className.indexOf('ena_ok') === -1) {
                     element.setAttribute('disable', false);
 
-                    if (arg.itens[item].click)
-                        element.addEventListener('click', arg.itens[item].click)
+                    if (arg.items[item].click)
+                        element.addEventListener('click', arg.items[item].click)
 
                     element.classList.remove('dis_ok');
                     element.classList.add('ena_ok');
@@ -317,14 +316,12 @@ export default (function () {
 
             setIcon(item, icon) {
                 let element = this.elList[item];
-                if (element) {
-                    element.getElementsByTagName('i')[0].classList = ''
-                    element.getElementsByTagName('i')[0].classList = icon;
-                }
+                if (element) 
+                    element.getElementsByTagName('i')[0].classList = icon + ' icon';
             },
 
             setDisable(arg) {
-                Object.entries(arg.itens).forEach(el => {
+                Object.entries(arg.items).forEach(el => {
                     let [key, props] = el;
                     if (arg.disable === true || props.disable === true)
                         this.disableItem(key, arg);
@@ -363,12 +360,12 @@ export default (function () {
             },
 
             subMenuCreate(owner, arg) {
-                Object.entries(arg.itens).forEach(el => {
+                Object.entries(arg.items).forEach(el => {
                     let [name, props] = el;
                     if (props.subMenu) {
                         create({
-                            id: '#xMenu_' + name,
-                            itens: props.subMenu.itens,
+                            el: '#xMenu_' + name,
+                            items: props.subMenu.items,
                             onOpen: props.subMenu.onOpen,
                             parent: ax.elList[name],
                             parentWidth: arg.width,
