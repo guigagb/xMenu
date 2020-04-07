@@ -3,6 +3,15 @@
 O componente xMenu tem o objetivo de criar um contextMenu (menu pop-up) com suas principais funcionalidades.
 Ele usa javascript nativo em sua construção.
 
+[Instalação](#instalação)<br>
+[Importando](#importando)<br>
+[Modo de Uso](#modo-de-uso)<br>
+[Modelo](#modelo)<br>
+[Parâmetro Create](#parâmetro-create)<br>
+[Parâmetro Item](#parâmetro-item)<br>
+[Métodos](#métodos)<br>
+[Desenvolvedores](#desenvolvedores)<br>
+
 ## Instalação
 
 Clone o repositório em um diretório local.
@@ -46,7 +55,7 @@ No javascript iremos instanciar o objeto da seguinte forma:
 <h3>Create</h3>
 
 ```javascript
-    const minhaDiv = new xMenu.create({
+    const menu = new xMenu.create({
         el: '#minhaDiv',
         items: {
             item1:{
@@ -58,6 +67,7 @@ No javascript iremos instanciar o objeto da seguinte forma:
         }
     })
 ```
+
 ## Modelo
 
 <table>
@@ -207,7 +217,7 @@ Create é responsável por instanciar o xMenu. Recebe um objeto como parâmetro 
     
 Esses métodos serão utilizados na variável instanciada. Ex.:<br>
 ```javascript
-    minhaDiv.disableAll();
+    menu.disableAll();
 ```
 
 <table>
@@ -255,6 +265,5 @@ Esses métodos serão utilizados na variável instanciada. Ex.:<br>
 
 ## Desenvolvedores
 
-[Francisco Alves](https://github.com/dffrancisco)<br>
+[Francisco Alves](https://github.com/dffrancisco)
 [Guilherme Trindade](https://github.com/guigagb)    
-</table>
