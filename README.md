@@ -29,7 +29,7 @@ Em seu html declare o css:
 
 Para usar o xMenu você deve chamá-lo em seu arquivo .js através de import.
 ```javascript
-    import xMenu from './xMenu2';
+    import xMenu from './xMenu2.js';
 ```
 
 ## Modo de Uso
@@ -45,7 +45,6 @@ Para usar o xMenu você deve chamá-lo em seu arquivo .js através de import.
     </head>
     <body>
         <div id="minhaDiv">Hello World!</div>
-        <script src="./xMenu2.js"></script>
         <script src="example.js" type="module"></script>
     </body>
     </html>
