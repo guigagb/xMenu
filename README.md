@@ -17,7 +17,7 @@ Ele usa javascript nativo em sua construção.
 Clone o repositório em um diretório local.
 
 ```sh
-    git clone git@github.com:guigagb/mofo-v2.git
+    git clone git@github.com:guigagb/xMenu.git
 ```
 
 ## Importando
@@ -27,7 +27,7 @@ Em seu html declare o css:
     <link rel="stylesheet" href="./xMenu2.css">
 ```
 
-Para usar o mofo você deve chamá-lo em seu arquivo .js através de import.
+Para usar o xMenu você deve chamá-lo em seu arquivo .js através de import.
 ```javascript
     import xMenu from './xMenu2';
 ```
@@ -40,7 +40,7 @@ Para usar o mofo você deve chamá-lo em seu arquivo .js através de import.
     <!DOCTYPE html>
     <html lang="pt-BR">
     <head>
-        <title>Mofo v2.0</title>
+        <title>xMenu v2.0</title>
         <link rel="stylesheet" href="./xMenu2.css">
     </head>
     <body>
